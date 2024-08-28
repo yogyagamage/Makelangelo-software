@@ -328,7 +328,6 @@ It pairs really well with Marlin-polargraph, the code in the brain of the robot 
 					</execution>
 					<execution>
 						<id>generate-code-coverage-report</id>
-						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
