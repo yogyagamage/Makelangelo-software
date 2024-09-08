@@ -22,11 +22,11 @@ jobs:
 
     - name: Get JaCoCo Coverage
       run: |
-        python3 coverage.py target/site/jacoco/jacoco.csv
+        python3 config/coverage.py target/site/jacoco/jacoco.csv
 
     - name: Fail if coverage has not improved
       run: |
-        coverage=$(python3 coverage.py target/site/jacoco/jacoco.csv)
+        coverage=$(python3 config/coverage.py target/site/jacoco/jacoco.csv)
         echo "Coverage is $coverage"
         if [ $(echo "$coverage <= 24.456" | bc -l) -eq 1 ]; then
           echo "Coverage has not improved!"
