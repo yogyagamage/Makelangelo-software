@@ -20,9 +20,15 @@ jobs:
       timeout-minutes: 15
       run: ./mvnw -B verify
 
-    - name: Fail if coverage has not improved
+    - name: Get JaCoCo Coverage
+      id: coverage  
       run: |
-        coverage=$(python3 config/coverage.py target/site/jacoco/jacoco.csv)
+        coverage=$(python3 coverage_check.py target/site/jacoco/jacoco.csv)
+        echo "::set-output name=coverage::$coverage"
+
+    - name: Fail if coverage is less than 70%
+      run: |
+        coverage=${{ steps.coverage.outputs.coverage }}
         if (( $(echo "$coverage < 24.46" | bc -l) )); then
           echo "Coverage has not improved."
           exit 1
