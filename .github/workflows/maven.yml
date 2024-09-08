@@ -1,12 +1,5 @@
 name: Java CI with Maven
 
-env:
-  # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases
-  # in your browser and copy the full "upload_url" value including the {?name,label} part
-  UPLOAD_URL: https://uploads.github.com/repos/MarginallyClever/Makelangelo-software/releases/54908875/assets{?name,label}
-  RELEASE_ID: 54908875 # same as above (id can just be taken out the upload_url, it's used to find old releases)
-
-
 on:
   push:
   pull_request:
@@ -23,24 +16,20 @@ jobs:
         java-version: '17'
         cache: 'maven'
 
-    # from https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
     - name: Build and Test with Maven
       timeout-minutes: 15
       run: ./mvnw -B verify
-    
-    - name: Generate JaCoCo Badge
-      uses: cicirello/jacoco-badge-generator@v2
-      with:
-        generate-branches-badge: true
 
-    - name: Commit and push the badge (if it changed)
-      uses: EndBug/add-and-commit@v9
-      with:
-        default_author: github_actions
-        message: 'commit badge'
-        add: '*.svg'
+    - name: Get JaCoCo Coverage
+      run: |
+        python3 coverage.py target/site/jacoco/jacoco.csv
 
-
-    - name: Package with Maven
-      run: ./mvnw -B clean package -DskipTests
-      
+    - name: Fail if coverage has not improved
+      run: |
+        coverage=$(python3 coverage.py target/site/jacoco/jacoco.csv)
+        echo "Coverage is $coverage"
+        if [ $(echo "$coverage <= 24.456" | bc -l) -eq 1 ]; then
+          echo "Coverage has not improved!"
+          exit 1
+        fi
+      shell: bash
