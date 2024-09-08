@@ -23,7 +23,7 @@ jobs:
     - name: Get JaCoCo Coverage
       id: coverage  
       run: |
-        coverage=$(python3 config/scoverage_check.py target/site/jacoco/jacoco.csv)
+        coverage=$(python3 config/coverage_check.py target/site/jacoco/jacoco.csv)
         echo "::set-output name=coverage::$coverage"
 
     - name: Fail if coverage is less than 70%
