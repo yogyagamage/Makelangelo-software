@@ -24,11 +24,11 @@ jobs:
       id: coverage  
       run: |
         coverage=$(python3 config/coverage.py target/site/jacoco/jacoco.csv)
-        echo "::set-output name=coverage::$coverage"
+        echo "COVERAGE=$coverage" >> $GITHUB_ENV
 
-    - name: Fail if coverage is less than 70%
+    - name: Fail if coverage has not improved.
       run: |
-        coverage=${{ steps.coverage.outputs.coverage }}
+        coverage=$COVERAGE
         if (( $(echo "$coverage < 24.46" | bc -l) )); then
           echo "Coverage has not improved."
           exit 1
