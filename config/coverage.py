@@ -37,8 +37,6 @@ def calculatePercentage(covered, missed):
 
 def main(jacocoCsvFile):
     coverage, branchCoverage = computeCoverage([jacocoCsvFile])
-    print(f"Instruction coverage: {coverage * 100:.2f}%")
-    print(f"Branch coverage: {branchCoverage * 100:.2f}%")
     
     # Return coverage percentage to check against the threshold
     return coverage * 100
