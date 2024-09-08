@@ -20,16 +20,11 @@ jobs:
       timeout-minutes: 15
       run: ./mvnw -B verify
 
-    - name: Get JaCoCo Coverage
-      run: |
-        python3 config/coverage.py target/site/jacoco/jacoco.csv
-
     - name: Fail if coverage has not improved
       run: |
         coverage=$(python3 config/coverage.py target/site/jacoco/jacoco.csv)
-        echo "Coverage is $coverage"
-        if [ $(echo "$coverage <= 24.456" | bc -l) -eq 1 ]; then
-          echo "Coverage has not improved!"
+        if (( $(echo "$coverage < 24.46" | bc -l) )); then
+          echo "Coverage has not improved."
           exit 1
         fi
       shell: bash
